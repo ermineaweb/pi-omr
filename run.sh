@@ -10,6 +10,8 @@ if [ ! -f ./input/"$1" ]; then
     exit 0
 fi
 
+# docker buildx build --platform linux/amd64,linux/arm64 -t ermineaweb/xmlparser:latest xml-parser-go/
+
 mkdir -p xml
 NAME="${1%.*}"
 
