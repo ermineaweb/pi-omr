@@ -1,0 +1,32 @@
+name: picamonitor
+
+services:
+  audiveris:
+    image: ermineaweb/audiveris
+    build:
+      context: ./
+      dockerfile: ./audiveris/Dockerfile
+      platforms:
+        - "linux/arm64/v8"
+
+  xmlparser:
+    image: ermineaweb/xmlparser
+    build:
+      context: ./
+      dockerfile: ./xml-parser-go/Dockerfile
+      platforms:
+        - "linux/arm64/v8"
+    depends_on:
+      audiveris:
+        condition: service_completed_successfully
+
+  pibuzzer:
+    image: ermineaweb/pibuzzer
+    build:
+      context: ./
+      dockerfile: ./pibuzzer/Dockerfile
+      platforms:
+        - "linux/arm64/v8"
+    depends_on:
+      xmlparser:
+        condition: service_completed_successfully
