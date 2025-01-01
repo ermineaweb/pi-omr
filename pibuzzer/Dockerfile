@@ -14,5 +14,7 @@ FROM debian:bullseye-slim
 
 WORKDIR /app
 COPY --from=builder \
-/build/target/release/main
+/build/target/release/pibuzzer
 ./
+
+ENTRYPOINT ["pibuzzer"]
