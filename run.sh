@@ -1,8 +1,12 @@
 #!/bin/bash
 
 if [[ $# -eq 0 ]] ; then
-    echo "filename needed in arguments"
+    echo "Filename needed in arguments"
     exit 0
+fi
+
+if [ ! -f /input/"$1" ]; then
+    echo "File input/$1 not found"
 fi
 
 (cd xml-parser-go && ./build.sh)

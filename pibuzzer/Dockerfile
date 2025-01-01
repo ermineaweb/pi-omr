@@ -13,8 +13,6 @@ RUN cargo build --release
 FROM debian:bullseye-slim
 
 WORKDIR /app
-COPY --from=builder \
-/build/target/release/pibuzzer
-./
+COPY --from=builder /build/target/release/pibuzzer ./
 
 ENTRYPOINT ["pibuzzer"]
