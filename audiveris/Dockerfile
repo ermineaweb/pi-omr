@@ -1,4 +1,4 @@
-FROM gradle:jdk8
+FROM gradle:jdk17
 
 WORKDIR /
 RUN git clone https://github.com/Audiveris/audiveris.git
