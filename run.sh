@@ -10,15 +10,15 @@ if [ ! -f ./input/"$1" ]; then
     exit 0
 fi
 
-mkdir -p xml
+(cd xml-parser-go && ./build.sh)
+
+rm -R result
+
 NAME="${1%.*}"
 
-docker run -it --rm -v $(pwd)/output:/output -v $(pwd)/input/"$1":/input/"$1" ermineaweb/audiveris 
+docker run -it --rm -v $(pwd)/output:/output -v $(pwd)/input/"$1":/input/"$1" ermineaweb/audiveris
 
-unzip output/"$NAME"/"$NAME".mxl -d ./xml
-mv xml/"$NAME".xml xml/sheet.xml
-rm xml/META-INF -R
+unzip output/"$NAME"/"$NAME".mxl -d ./result
+rm result/META-INF -R
 
-docker run -it --rm -v $(pwd)/xml/sheet.xml:/app/sheet.xml ermineaweb/xmlparser > sheet_string
-
-docker run -it --rm -v $(pwd)/sheet_string:/app/sheet_string ermineaweb/pibuzzer
+docker run -it --rm -v $(pwd)/result/"$NAME".xml:/app/"$NAME".xml xml-parser-go "$NAME".xml > result/"$NAME".rs

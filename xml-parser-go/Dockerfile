@@ -1,9 +1,8 @@
 FROM golang:1.23.4 AS builder
 
 WORKDIR /build
-COPY ./go.* ./
-RUN go mod download
 COPY ./ ./
+RUN go mod download
 RUN CGO_ENABLED=0 go build -o ./bin/main ./src
 
 FROM scratch

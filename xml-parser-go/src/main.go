@@ -7,20 +7,35 @@ import (
 )
 
 func main() {
-	 raw, err := os.ReadFile("sheet.xml")
-	 if err != nil {
-		 panic(err)
-	 }
+	if len(os.Args) < 2 {
+		panic("Filename missing.")
+	}
+
+	raw, err := os.ReadFile(os.Args[1])
+	if err != nil {
+		panic(err)
+	}
 
 	score := Score{}
 	xml.Unmarshal(raw, &score)
-	score.to_str()
-	fmt.Println(score.to_str())
+
+	pibuzzer_template := `pub const TEMPO: u16 = %s;
+pub const MELODY: &str = r#"
+%s
+"#;`
+	tempo, string_score := score.to_str()
+	formatted := fmt.Sprintf(pibuzzer_template, tempo, string_score)
+	fmt.Println(formatted)
 }
 
 type Score struct {
 	Part struct {
 		Measure struct {
+			Direction struct {
+				Sound struct {
+					Tempo string `xml:"tempo,attr"`
+				} `xml:"sound"`
+			} `xml:"direction"`
 			Note []struct {
 				Pitch struct {
 					Step   string `xml:"step"`
@@ -35,8 +50,9 @@ type Score struct {
 	} `xml:"part"`
 }
 
-func (s *Score) to_str() string {
+func (s *Score) to_str() (string, string) {
 	var str = ""
+	var tempo = s.Part.Measure.Direction.Sound.Tempo
 	for _, note := range s.Part.Measure.Note {
 		if note.Voice == 1 {
 			if note.Pitch.Step != "" {
@@ -51,7 +67,7 @@ func (s *Score) to_str() string {
 				case "16th":
 					duration = "16"
 				default:
-					duration = "4"
+					panic(fmt.Sprintf("Note duration not implemented %s", duration))
 				}
 
 				var alter = ""
@@ -75,5 +91,5 @@ func (s *Score) to_str() string {
 	}
 
 	// remove the last comma
-	return str[:len(str)-1]
+	return tempo, str[:len(str)-1]
 }

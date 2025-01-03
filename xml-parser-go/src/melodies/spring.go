@@ -1,4 +1,4 @@
-package main
+package melodies
 
 var Spring = []byte(`<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0.1 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
